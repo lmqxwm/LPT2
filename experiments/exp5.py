@@ -116,7 +116,7 @@ if __name__ == '__main__':
         
         vxs = [0.5, 0.01]
         vys = [0.5, 0.01]
-        cors = 0.4 * np.arange(11)/10
+        cors = 0.1 * np.arange(11)/10
 
         for t in range(len(types)):
             for xf in range(4):
@@ -147,69 +147,69 @@ if __name__ == '__main__':
                                 pd.DataFrame(results, 
                                     columns=cors, 
                                     index=["cor_Z", "noZ", "XY_Z", "XY_meanZ", "XY_noZ", "Char_Z", "Char_meanZ"]).to_csv(
-                                        sys.path[0]+"/results/result_n1000_m50_small_x_func_"+str(xf)+"_"+str(yf)+"_var_"+str(vxs[vx1])+"_"+str(vys[vy1])+"_"+hs[t]+"_"+types[t]+".csv")
+                                        sys.path[0]+"/results/result_n1000_m50_cor01_x_func_"+str(xf)+"_"+str(yf)+"_var_"+str(vxs[vx1])+"_"+str(vys[vy1])+"_"+hs[t]+"_"+types[t]+".csv")
 
-        for t in range(len(types)):
-            for xf in range(4):
-                yfs = [0, 1] if xf <= 1 else [2, 3]
-                for yf in yfs:
-                    for vx1 in range(len(vxs)):
-                        for vy1 in range(len(vys)):
-                            print("Processing type=", types[t])
-                            print("Processing xf, yf, vx, vy=", xf, yf, vx1, vy1)
-                            results = np.zeros([7, len(cors)])
-                            for c in range(len(cors)):
-                                print("Processing cor=", cors[c])
-                                result = pool.map(partial(expfunc.experiment, 
-                                            N=N, M=25, type=types[t], cor=cors[c],
-                                            xfun=xfuns[xf], yfun=yfuns[yf], perm="x",
-                                            vx=vxs[vx1], vy=vys[vy1]), 
-                                            [i for i in range(100)])
-
-            
-                                results[0, c] = np.mean([r[0] for r in result])
-                                results[1, c] = np.mean([r[1] for r in result])
-                                results[2, c] = np.mean([r[2] for r in result])
-                                results[3, c] = np.mean([r[3] for r in result])
-                                results[4, c] = np.mean([r[4] for r in result])
-                                results[5, c] = np.mean([r[5] for r in result])
-                                results[6, c] = np.mean([r[6] for r in result])
-
-                                pd.DataFrame(results, 
-                                    columns=cors, 
-                                    index=["cor_Z", "noZ", "XY_Z", "XY_meanZ", "XY_noZ", "Char_Z", "Char_meanZ"]).to_csv(
-                                        sys.path[0]+"/results/result_n1000_m25_small_x_func_"+str(xf)+"_"+str(yf)+"_var_"+str(vxs[vx1])+"_"+str(vys[vy1])+"_"+hs[t]+"_"+types[t]+".csv")
-
-        for t in range(len(types)):
-            for xf in range(4):
-                yfs = [0, 1] if xf <= 1 else [2, 3]
-                for yf in yfs:
-                    for vx1 in range(len(vxs)):
-                        for vy1 in range(len(vys)):
-                            print("Processing type=", types[t])
-                            print("Processing xf, yf, vx, vy=", xf, yf, vx1, vy1)
-                            results = np.zeros([7, len(cors)])
-                            for c in range(len(cors)):
-                                print("Processing cor=", cors[c])
-                                result = pool.map(partial(expfunc.experiment, 
-                                            N=N, M=10, type=types[t], cor=cors[c],
-                                            xfun=xfuns[xf], yfun=yfuns[yf], perm="x",
-                                            vx=vxs[vx1], vy=vys[vy1]), 
-                                            [i for i in range(100)])
+        # for t in range(len(types)):
+        #     for xf in range(4):
+        #         yfs = [0, 1] if xf <= 1 else [2, 3]
+        #         for yf in yfs:
+        #             for vx1 in range(len(vxs)):
+        #                 for vy1 in range(len(vys)):
+        #                     print("Processing type=", types[t])
+        #                     print("Processing xf, yf, vx, vy=", xf, yf, vx1, vy1)
+        #                     results = np.zeros([7, len(cors)])
+        #                     for c in range(len(cors)):
+        #                         print("Processing cor=", cors[c])
+        #                         result = pool.map(partial(expfunc.experiment, 
+        #                                     N=N, M=25, type=types[t], cor=cors[c],
+        #                                     xfun=xfuns[xf], yfun=yfuns[yf], perm="x",
+        #                                     vx=vxs[vx1], vy=vys[vy1]), 
+        #                                     [i for i in range(100)])
 
             
-                                results[0, c] = np.mean([r[0] for r in result])
-                                results[1, c] = np.mean([r[1] for r in result])
-                                results[2, c] = np.mean([r[2] for r in result])
-                                results[3, c] = np.mean([r[3] for r in result])
-                                results[4, c] = np.mean([r[4] for r in result])
-                                results[5, c] = np.mean([r[5] for r in result])
-                                results[6, c] = np.mean([r[6] for r in result])
+        #                         results[0, c] = np.mean([r[0] for r in result])
+        #                         results[1, c] = np.mean([r[1] for r in result])
+        #                         results[2, c] = np.mean([r[2] for r in result])
+        #                         results[3, c] = np.mean([r[3] for r in result])
+        #                         results[4, c] = np.mean([r[4] for r in result])
+        #                         results[5, c] = np.mean([r[5] for r in result])
+        #                         results[6, c] = np.mean([r[6] for r in result])
 
-                                pd.DataFrame(results, 
-                                    columns=cors, 
-                                    index=["cor_Z", "noZ", "XY_Z", "XY_meanZ", "XY_noZ", "Char_Z", "Char_meanZ"]).to_csv(
-                                        sys.path[0]+"/results/result_n1000_10_small_x_func_"+str(xf)+"_"+str(yf)+"_var_"+str(vxs[vx1])+"_"+str(vys[vy1])+"_"+hs[t]+"_"+types[t]+".csv")
+        #                         pd.DataFrame(results, 
+        #                             columns=cors, 
+        #                             index=["cor_Z", "noZ", "XY_Z", "XY_meanZ", "XY_noZ", "Char_Z", "Char_meanZ"]).to_csv(
+        #                                 sys.path[0]+"/results/result_n1000_m25_small_x_func_"+str(xf)+"_"+str(yf)+"_var_"+str(vxs[vx1])+"_"+str(vys[vy1])+"_"+hs[t]+"_"+types[t]+".csv")
+
+        # for t in range(len(types)):
+        #     for xf in range(4):
+        #         yfs = [0, 1] if xf <= 1 else [2, 3]
+        #         for yf in yfs:
+        #             for vx1 in range(len(vxs)):
+        #                 for vy1 in range(len(vys)):
+        #                     print("Processing type=", types[t])
+        #                     print("Processing xf, yf, vx, vy=", xf, yf, vx1, vy1)
+        #                     results = np.zeros([7, len(cors)])
+        #                     for c in range(len(cors)):
+        #                         print("Processing cor=", cors[c])
+        #                         result = pool.map(partial(expfunc.experiment, 
+        #                                     N=N, M=10, type=types[t], cor=cors[c],
+        #                                     xfun=xfuns[xf], yfun=yfuns[yf], perm="x",
+        #                                     vx=vxs[vx1], vy=vys[vy1]), 
+        #                                     [i for i in range(100)])
+
+            
+        #                         results[0, c] = np.mean([r[0] for r in result])
+        #                         results[1, c] = np.mean([r[1] for r in result])
+        #                         results[2, c] = np.mean([r[2] for r in result])
+        #                         results[3, c] = np.mean([r[3] for r in result])
+        #                         results[4, c] = np.mean([r[4] for r in result])
+        #                         results[5, c] = np.mean([r[5] for r in result])
+        #                         results[6, c] = np.mean([r[6] for r in result])
+
+        #                         pd.DataFrame(results, 
+        #                             columns=cors, 
+        #                             index=["cor_Z", "noZ", "XY_Z", "XY_meanZ", "XY_noZ", "Char_Z", "Char_meanZ"]).to_csv(
+        #                                 sys.path[0]+"/results/result_n1000_m10_small_x_func_"+str(xf)+"_"+str(yf)+"_var_"+str(vxs[vx1])+"_"+str(vys[vy1])+"_"+hs[t]+"_"+types[t]+".csv")
 
         # xfuns = [None, expfunc.Z_to_Y, expfunc.Z_to_Y2, expfunc.Z_to_Y3]
         # yfuns = [None, expfunc.Z_to_Y, expfunc.Z_to_Y2, expfunc.Z_to_Y3]
