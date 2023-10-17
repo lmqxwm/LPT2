@@ -17,33 +17,48 @@ def data_generative(N=100, s=1, type="normal", hypo="h0", xfun=None, yfun=None, 
     else:
         Zy = yfun(Z)   
 
-    if hypo == "h0":
-        if type == "normal":
-            X = np.random.normal(loc=0, scale=vx, size=N) + Zx
-            Y = np.random.normal(loc=0, scale=vy, size=N) + Zy
-        elif type == "skewed_normal":
-            X = st.skewnorm.rvs(a=-5, loc=0, scale=vx, size=N) + Zx
-            Y = st.skewnorm.rvs(a=-5, loc=0, scale=vy, size=N) + Zy
-        else:
-            raise ValueError("Non-existing distribution type!")
+    # if hypo == "h0":
+    #     if type == "normal":
+    #         X = np.random.normal(loc=0, scale=vx, size=N) + Zx
+    #         Y = np.random.normal(loc=0, scale=vy, size=N) + Zy
+    #     elif type == "skewed_normal":
+    #         X = st.skewnorm.rvs(a=-5, loc=0, scale=vx, size=N) + Zx
+    #         Y = st.skewnorm.rvs(a=-5, loc=0, scale=vy, size=N) + Zy
+    #     else:
+    #         raise ValueError("Non-existing distribution type!")
     
-    elif hypo == "h1":
-        Zxy = np.column_stack((Zx, Zy))
-        if type == "normal":
-            data = np.array([st.multivariate_normal.rvs(mean=Zxy[i,], cov=[[vx, np.sqrt(vx*vy)*cor],[np.sqrt(vx*vy)*cor, vy]], size=1) for i in range(Zxy.shape[0])])
-            X = data[:, 0]
-            Y = data[:, 1]
-        elif type == "skewed_normal":
-            skewness = [5, -5]  # Skewness vector
-            normal_samples = np.array([st.multivariate_normal.rvs(mean=Zxy[i,], cov=[[vx*0.8, np.sqrt(vx*vy)*cor*0.8],[np.sqrt(vx*vy)*cor*0.8, vy*0.8]], size=1) for i in range(Zxy.shape[0])])
-            skew_samples = st.skewnorm.rvs(skewness, loc=0, scale=[vx*0.2, vy*0.2], size=(N, 2))
-            skewed_normal_samples = normal_samples + skew_samples
-            X = skewed_normal_samples[:, 0]
-            Y = skewed_normal_samples[:, 1]
-        else:
-            raise ValueError("Non-existing distribution type!")
+    # elif hypo == "h1":
+    #     Zxy = np.column_stack((Zx, Zy))
+    #     if type == "normal":
+    #         data = np.array([st.multivariate_normal.rvs(mean=Zxy[i,], cov=[[vx, np.sqrt(vx*vy)*cor],[np.sqrt(vx*vy)*cor, vy]], size=1) for i in range(Zxy.shape[0])])
+    #         X = data[:, 0]
+    #         Y = data[:, 1]
+    #     elif type == "skewed_normal":
+    #         skewness = [5, -5]  # Skewness vector
+    #         normal_samples = np.array([st.multivariate_normal.rvs(mean=Zxy[i,], cov=[[vx*0.8, np.sqrt(vx*vy)*cor*0.8],[np.sqrt(vx*vy)*cor*0.8, vy*0.8]], size=1) for i in range(Zxy.shape[0])])
+    #         skew_samples = st.skewnorm.rvs(skewness, loc=0, scale=[vx*0.2, vy*0.2], size=(N, 2))
+    #         skewed_normal_samples = normal_samples + skew_samples
+    #         X = skewed_normal_samples[:, 0]
+    #         Y = skewed_normal_samples[:, 1]
+    #     else:
+    #         raise ValueError("Non-existing distribution type!")
+    # else:
+    #     raise ValueError("Non-existing Hypothesis type!")
+    Zxy = np.column_stack((Zx, Zy))
+    if type == "normal":
+        data = np.array([st.multivariate_normal.rvs(mean=Zxy[i,], cov=[[vx, np.sqrt(vx*vy)*cor],[np.sqrt(vx*vy)*cor, vy]], size=1) for i in range(Zxy.shape[0])])
+        X = data[:, 0]
+        Y = data[:, 1]
+    elif type == "skewed_normal":
+        skewness = [5, -5]  # Skewness vector
+        normal_samples = np.array([st.multivariate_normal.rvs(mean=Zxy[i,], cov=[[vx*0.8, np.sqrt(vx*vy)*cor*0.8],[np.sqrt(vx*vy)*cor*0.8, vy*0.8]], size=1) for i in range(Zxy.shape[0])])
+        skew_samples = st.skewnorm.rvs(skewness, loc=0, scale=[vx*0.2, vy*0.2], size=(N, 2))
+        skewed_normal_samples = normal_samples + skew_samples
+        X = skewed_normal_samples[:, 0]
+        Y = skewed_normal_samples[:, 1]
     else:
-        raise ValueError("Non-existing Hypothesis type!")
+        raise ValueError("Non-existing distribution type!")
+
     return X, Y, Z
 
 def experiment(i, N=100, M=10, type="normal", \
