@@ -2,6 +2,11 @@ import numpy as np
 import simufunc
 import scipy.stats as st
 
+def gen_cor_binomials(p1, p2, cor):
+    x1 = np.random.binomial(1, p1)
+    virt = np.random.rand(len(p1))
+    x2 = np.random.binomial(1, p2) * (virt < cor) + np.random.binomial(1, 1-p2) * (virt >= cor)
+    return np.column_stack((x1, x2))
 
 def data_generative(N=100, s=1, type="normal", hypo="h0", xfun=None, yfun=None, cor=0.4, vx=5, vy=5):
     '''Generate H0 samples with continuous Z'''
@@ -56,6 +61,10 @@ def data_generative(N=100, s=1, type="normal", hypo="h0", xfun=None, yfun=None, 
         skewed_normal_samples = normal_samples + skew_samples
         X = skewed_normal_samples[:, 0]
         Y = skewed_normal_samples[:, 1]
+    elif type == "binomial":
+        data = gen_cor_binomials(Zx, Zy, cor)
+        X = data[:, 0]
+        Y = data[:, 1]
     else:
         raise ValueError("Non-existing distribution type!")
 
@@ -93,6 +102,12 @@ def Z_to_Y2(Z):
 def Z_to_Y3(Z):
     return 2/(Z+1)
 
+def Z_to_Y4(Z):
+    return Z**2
+
+def Z_to_Y5(Z):
+    return 1 - Z**3
+
 def experiment3(i, N=100, M=10, type="normal", hypo="h1", \
     xfun=None, yfun=None, perm="y", cor=0.8, vx=5, vy=5):
     if i%5 == 0:
@@ -102,3 +117,11 @@ def experiment3(i, N=100, M=10, type="normal", hypo="h1", \
     alpha = 0.05
     return int(p1 <= alpha), int(p2 <= alpha), int(p3 <= alpha), int(p4 <= alpha), int(p5 <= alpha), int(p6 <= alpha)
 
+def experiment4(i, N=100, M=10, type="binomial", hypo="h1", \
+    xfun=None, yfun=None, perm="y", cor=0, vx=5, vy=5):
+    if i%5 == 0:
+        print(i)
+    X, Y, Z = data_generative(N=N, s=i, type=type, hypo=hypo, yfun=yfun, xfun=xfun, cor=cor, vx=vx, vy=vy)
+    p1, p2, p3, p4, p5 = simufunc.LPT(X, Y, Z, B = 100, M = M, perm=perm)
+    alpha = 0.05
+    return int(p1 <= alpha), int(p2 <= alpha), int(p3 <= alpha), int(p4 <= alpha), int(p5 <= alpha)

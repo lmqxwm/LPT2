@@ -48,11 +48,11 @@ def LPT(X, Y, Z, M, B=100, gfunc=compute_G, perm="x"):
     T_xy_sam = np.abs(X @ Y)
     T_xy_per = np.zeros(B)
 
-    numpy2ri.activate()
-    T_char_o_sam = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(Z)))[0]
-    T_char_m_sam = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(ZZ)))[0]
-    T_char_o_per = np.zeros(B)
-    T_char_m_per = np.zeros(B)
+    # numpy2ri.activate()
+    # T_char_o_sam = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(Z)))[0]
+    # T_char_m_sam = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(ZZ)))[0]
+    # T_char_o_per = np.zeros(B)
+    # T_char_m_per = np.zeros(B)
 
 
     T_double_o_sam = np.abs(compute_T_double(X, Y, Z))
@@ -89,8 +89,9 @@ def LPT(X, Y, Z, M, B=100, gfunc=compute_G, perm="x"):
             T_xy_per[b] = np.abs(new_X @ Y)
             # new_X_resid_o = _perm(X_resid_o, M)
             # T_resid_per[b] = corr(new_X_resid_o, Y_resid_o)
-            T_char_o_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(new_X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(Z)))[0]
-            T_char_m_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(new_X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(ZZ)))[0]
+
+            # T_char_o_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(new_X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(Z)))[0]
+            # T_char_m_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(new_X), numpy2ri.py2rpy(Y), numpy2ri.py2rpy(ZZ)))[0]
     
         elif perm == "y":
             new_Y = _perm(Y, M)
@@ -102,8 +103,9 @@ def LPT(X, Y, Z, M, B=100, gfunc=compute_G, perm="x"):
             T_xy_per[b] = np.abs(new_Y @ X)
             # new_Y_resid_o = _perm(Y_resid_o, M)
             # T_resid_per[b] = corr(X_resid_o, new_Y_resid_o)
-            T_char_o_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(new_Y), numpy2ri.py2rpy(Z)))[0]
-            T_char_m_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(new_Y), numpy2ri.py2rpy(ZZ)))[0]
+            
+            # T_char_o_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(new_Y), numpy2ri.py2rpy(Z)))[0]
+            # T_char_m_per[b] = robjects.conversion.rpy2py(codec(numpy2ri.py2rpy(X), numpy2ri.py2rpy(new_Y), numpy2ri.py2rpy(ZZ)))[0]
     
         else:
             raise ValueError("Non-existing permutating variable!")
@@ -114,14 +116,14 @@ def LPT(X, Y, Z, M, B=100, gfunc=compute_G, perm="x"):
     p_xy_o = ((T_xy_o_per >= T_xy_o_sam).sum()+1) / (B+1)
     p_xy_m = ((T_xy_m_per >= T_xy_m_sam).sum()+1) / (B+1)
     p_xy = ((T_xy_per >= T_xy_sam).sum()+1) / (B+1)
-    p_char_o = ((T_char_o_per >= T_char_o_sam).sum()+1) / (B+1)
-    p_char_m = ((T_char_m_per >= T_char_m_sam).sum()+1) / (B+1)
+    # p_char_o = ((T_char_o_per >= T_char_o_sam).sum()+1) / (B+1)
+    # p_char_m = ((T_char_m_per >= T_char_m_sam).sum()+1) / (B+1)
     
     # p_o_resid = ((T_resid_per >= T_resid_sam).sum()+1) / (B+1)
 
-    numpy2ri.deactivate()
+    # numpy2ri.deactivate()
 
-    return p_cor_o, p_cor, p_xy_o, p_xy_m, p_xy, p_char_o, p_char_m
+    return p_cor_o, p_cor, p_xy_o, p_xy_m, p_xy
 
 def LPT_resid(X, Y, Z, M, B=100, gfunc=compute_G, perm="x"):
     G, ZZ = gfunc(Z, M)
