@@ -10,7 +10,7 @@ import simufunc
 
 if __name__ == '__main__':
     pool = mp.Pool(processes=6)
-    N = 1000
+    N = 100
     Ms = [math.ceil(N**(1/10)), 5, math.ceil(N**(1/2)), 16, 25, 50]
 
     #types = ["normal", "skewed_normal", "normal", "skewed_normal", "uni", "poi"]
@@ -47,10 +47,10 @@ if __name__ == '__main__':
                     results[2, c] = np.mean([r[2] for r in result])
                     results[3, c] = np.mean([r[3] for r in result])
                     results[4, c] = np.mean([r[4] for r in result])
-                    results[5, c] = np.mean([r[5] for r in result])
+                    
                     
 
             pd.DataFrame(results, 
                 columns=Ms, 
                 index=["cor_Z", "noZ", "XY_Z", "XY_meanZ", "XY_noZ"]).to_csv(
-                    sys.path[0]+"/results/result_n1000_ber_func_"+str(xf)+"_"+str(yf)+".csv")
+                    sys.path[0]+"/results/result_n100_ber_func_"+str(xf)+"_"+str(yf)+".csv")

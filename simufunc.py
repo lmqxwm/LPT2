@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
-import rpy2.robjects as robjects
-from rpy2.robjects.packages import importr
-from rpy2.robjects import numpy2ri
+# import rpy2.robjects as robjects
+# from rpy2.robjects.packages import importr
+# from rpy2.robjects import numpy2ri
 
-FOCI = importr("FOCI")
-codec = FOCI.codec
+# FOCI = importr("FOCI")
+# codec = FOCI.codec
 
 
 def compute_G(Z, M):
